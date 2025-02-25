@@ -1,24 +1,23 @@
-import pytest
 import polars as pl
 import wandb
-from aquarium_adventures.transformations import AquariumTransformer
+
 from aquarium_adventures.computations import HPCComputations
 from aquarium_adventures.pipeline import AquariumPipeline
+from aquarium_adventures.transformations import AquariumTransformer
+
 
 def test_pipeline_chain(monkeypatch):
     # Minimal DataFrame
-    df_main = pl.DataFrame({
-        "tank_id": [1, 2],
-        "pH": [7.0, 7.2],
-        "temp": [25.0, 26.0],
-        "capacity_liters": [500, 1000]
-    })
+    df_main = pl.DataFrame({"tank_id": [1, 2], "pH": [7.0, 7.2], "temp": [25.0, 26.0], "capacity_liters": [500, 1000]})
 
     logs = []
+
     def fake_init(*args, **kwargs):
         return "mock_run"
+
     def fake_log(data, step=None):
         logs.append(data)
+
     def fake_finish():
         pass
 
