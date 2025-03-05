@@ -4,47 +4,8 @@ import pytest
 from aquarium_adventures.transformations import AquariumTransformer
 
 
-@pytest.fixture()
-def sensors_df():
-    yield pl.DataFrame(
-        {
-            "tank_id": [1, 1, 2],
-            "time": ["2025-01-01 00:00", "2025-01-01 01:00", "2025-01-01 00:30"],
-            "pH": [7.0, 7.2, 7.5],
-            "temp": [25.0, 26.0, 24.5],
-            "quantity_liters": [500, None, 1000],
-        }
-    )
-
-
-@pytest.fixture()
-def sensors_df_without_quantities():
-    yield pl.DataFrame(
-        {
-            "tank_id": [1, 1, 2],
-            "time": ["2025-01-01 00:00", "2025-01-01 01:00", "2025-01-01 00:30"],
-            "pH": [7.0, 7.2, 7.5],
-            "temp": [25.0, 26.0, 24.5],
-        }
-    )
-
-
-@pytest.fixture()
-def tank_info_df():
-    yield pl.DataFrame(
-        {
-            "tank_id": [1, 2],
-            "capacity_liters": [500, 1000],
-            "fish_species": [
-                "VelvetLoach,MarvelousMolly,EtherealSeahorse",
-                "FantasticZebrafish,VelvetLoach,SereneTang",
-            ],
-        }
-    ).with_columns(pl.col("fish_species").str.split(","))
-
-
-def test_transformer_analyze_data(sensors_df, tank_info_df):
-    transformer = AquariumTransformer(tank_info_df)
+def test_transformer_analyze_data(sensors_df, tank_info_df_fish_species_split):
+    transformer = AquariumTransformer(tank_info_df_fish_species_split)
     out_df = transformer.analyze_data(sensors_df)
 
     assert (
@@ -73,8 +34,8 @@ def test_add_num_readings_per_tank(sensors_df):
     assert out_df["tank_num_readings"][2] == 1
 
 
-def test_add_num_readings_per_fish_species(sensors_df, tank_info_df):
-    transformer = AquariumTransformer(tank_info_df)
+def test_add_num_readings_per_fish_species(sensors_df, tank_info_df_fish_species_split):
+    transformer = AquariumTransformer(tank_info_df_fish_species_split)
     out_df = transformer.add_num_readings_per_fish_species(sensors_df)
 
     assert out_df.filter(pl.col("fish_species") == "VelvetLoach")["fish_species_num_readings"][0] == 3
@@ -84,7 +45,8 @@ def test_add_num_readings_per_fish_species(sensors_df, tank_info_df):
     assert out_df.filter(pl.col("fish_species") == "FantasticZebrafish")["tank_id"].len() == 1
 
     transformer = AquariumTransformer(None)
-    pytest.raises(AttributeError, transformer.add_num_readings_per_fish_species, sensors_df)
+    with pytest.raises(AttributeError):
+        transformer.add_num_readings_per_fish_species(sensors_df)
 
 
 def test_standard_temperature():
