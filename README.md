@@ -153,11 +153,11 @@ Il sistema Aquarium Adventures è composto da diverse componenti che lavorano in
 > 1. n = numero di rilevazioni (lunghezza degli array)
 > 2. Se n = 0, restituisci 0.0
 > 3. Inizializza stress_sum = 0.0
-> 4. Per ogni coppia di rilevazioni (i, j) da 0 a n-1:
->    a. pH_dev = |pH_vals[i] - pH_vals[j]| (deviazione assoluta dei valori di pH)
->    b. t_dev = |temp_vals[i] - temp_vals[j]| * 2.0 (deviazione assoluta di temperatura moltiplicata per 2)
->    c. quantity_factor = (500.0 / quantity_vals[i]) + (500.0 / quantity_vals[j])
->    d. stress_sum += (pH_dev + t_dev) * quantity_factor
+> 4. Per ogni coppia di rilevazioni (i, j) da 0 a n-1:\
+>    a. pH_dev = |pH_vals[i] - pH_vals[j]| (deviazione assoluta dei valori di pH)\
+>    b. t_dev = |temp_vals[i] - temp_vals[j]| * 2.0 (deviazione assoluta di temperatura moltiplicata per 2)\
+>    c. quantity_factor = (500.0 / quantity_vals[i]) + (500.0 / quantity_vals[j])\
+>    d. stress_sum += (pH_dev + t_dev) * quantity_factor\
 > 5. Stress finale = stress_sum / (n * n)
 >
 > Output:
