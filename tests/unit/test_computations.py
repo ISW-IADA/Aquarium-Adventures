@@ -20,7 +20,7 @@ def test_is_function_numba():
 
 
 def test_hpc_computations_class():
-    df_input = pl.DataFrame({"tank_id": [1, 1], "pH": [7.0, 7.2], "temp": [25, 26], "capacity_liters": [500, 500]})
+    df_input = pl.DataFrame({"tank_id": [1, 1], "pH": [7.0, 7.2], "temp": [25, 26], "quantity_liters": [500, 500]})
     hpc = AquariumHPCComputations()
     df_out = hpc.analyze_data(df_input)
     assert "stress_score" in df_out.columns
